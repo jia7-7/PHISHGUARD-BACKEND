@@ -3,8 +3,8 @@ services:
     name: phishguard-api
     runtime: docker
     plan: free
-    dockerfilePath: ./Dockerfile
-    dockerContext: .
+    dockerfilePath: ./PhishGuard_后端公网部署包_v0.5.0_2026-08-23/Dockerfile
+    dockerContext: ./PhishGuard_后端公网部署包_v0.5.0_2026-08-23
     healthCheckPath: /health
     autoDeployTrigger: commit
     envVars:
