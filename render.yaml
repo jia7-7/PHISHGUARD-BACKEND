@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: phishguard-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: PHISHGUARD_CORS_ORIGINS
+        value: https://ancien0126.github.io
+      - key: PHISHGUARD_RUNTIME_DIR
+        value: /tmp/phishguard
+      - key: LLM_ENABLED
+        value: "true"
+      - key: ALLOW_DETERMINISTIC_FALLBACK
+        value: "false"
+      - key: LLM_PROVIDER
+        value: openai
+      - key: LLM_VENDOR
+        value: deepseek
+      - key: OPENAI_BASE_URL
+        value: https://api.deepseek.com
+      - key: OPENAI_MODEL
+        value: deepseek-v4-flash
+      - key: OCR_ENGINE
+        value: tesseract
+      - key: OPENAI_API_KEY
+        sync: false

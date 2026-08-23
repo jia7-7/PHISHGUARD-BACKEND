@@ -1,0 +1,315 @@
+# 规则定义配置
+schema_version: "2.1.0"
+updated_at: "2026-08-11"
+
+# 危险附件后缀
+dangerous_extensions:
+  - .exe
+  - .scr
+  - .js
+  - .jse
+  - .bat
+  - .cmd
+  - .com
+  - .vbs
+  - .vbe
+  - .ps1
+  - .hta
+  - .wsf
+  - .wsh
+  - .msi
+  - .jar
+  - .lnk
+
+# 包含关系抑制
+rule_suppression:
+  PASSWORD_FORM_UNTRUSTED_TARGET:
+    suppresses: ["HTML_PASSWORD_INPUT", "FORM_COLLECTS_SECRET"]
+  TRUSTED_SERVICE_FORBIDDEN_FIELD:
+    suppresses: ["HTML_PASSWORD_INPUT", "FORM_COLLECTS_SECRET"]
+  FORM_COLLECTS_SECRET:
+    suppresses: ["FORM_COLLECTS_SENSITIVE_INFO"]
+  DOMAIN_HOMOGRAPH_ATTACK:
+    suppresses: ["DOMAIN_SIMILAR_TO_OFFICIAL", "DOMAIN_KEYWORD_IMPERSONATION"]
+  DOMAIN_PUNYCODE_SUSPICIOUS:
+    suppresses: ["DOMAIN_SIMILAR_TO_OFFICIAL"]
+  LINK_TEXT_HREF_MISMATCH:
+    suppresses: ["EMAIL_SENDER_LINK_MISMATCH"]
+  TIME_LIMIT_PRESSURE:
+    suppresses: ["URGENT_VERIFY_WORDING"]
+  ATTACHMENT_DOUBLE_EXTENSION:
+    suppresses: ["ATTACHMENT_EXECUTABLE"]
+  QR_CREDENTIAL_URL:
+    suppresses: ["QR_CODE_EXTERNAL_URL"]
+
+# 学校品牌关键词
+brand_keywords:
+  - 山东大学
+  - 山大
+  - sdu
+  - 统一认证
+  - 校园卡
+  - 学工号
+  - 信息化工作办公室
+
+# 登录认证相关关键词
+login_keywords:
+  - login
+  - auth
+  - verify
+  - 登录
+  - 认证
+  - 验证
+  - signin
+  - 统一身份
+  - portal
+  - cas
+
+# 话术关键词配置
+wording_patterns:
+  urgent_verify:
+    keywords: ["立即验证", "马上认证", "立即认证", "马上验证", "请尽快验证", "速验证"]
+    confidence: 0.65
+  time_limit:
+    keywords: ["小时内", "今日内", "24小时", "12小时", "48小时", "今日截止", "过期"]
+    confidence: 0.75
+  account_disable:
+    keywords: ["账号停用", "账号冻结", "账号关闭", "账户停用", "账户冻结", "停用账号", "禁用账号", "注销账号", "账号将被停用", "账号将被冻结", "账户将被停用", "账户将被冻结"]
+    confidence: 0.75
+  reward_bait:
+    keywords: ["奖学金", "补贴", "退款", "领取", "助学", "助学金", "补助金", "退费"]
+    confidence: 0.65
+  security_upgrade:
+    keywords: ["安全升级", "异常登录", "安全中心", "安全验证", "账号保护", "身份验证"]
+    confidence: 0.55
+  credential_request:
+    keywords: ["请回复密码", "发送验证码", "输入银行卡", "提交密码", "填写密码", "验证码到"]
+    confidence: 0.85
+
+# 敏感字段关键词
+sensitive_info_fields:
+  - student_id
+  - 学号
+  - phone
+  - 手机
+  - 电话
+  - id_number
+  - 身份证
+  - real_name
+  - 姓名
+
+secret_fields:
+  - password
+  - 密码
+  - token
+  - sms_code
+  - 验证码
+  - bank_card
+  - 银行卡
+  - payment_password
+  - 支付密码
+
+# 子域名层级阈值
+max_subdomain_levels: 4
+
+# ── 规则定义（可配置的规则元数据）──
+# enabled: 规则开关（false 时跳过执行）
+# group: 规则分组（覆盖代码默认值）
+# severity: 默认严重度（代码中 make_evidence 可覆盖）
+# confidence: 默认置信度（代码中可覆盖）
+# base_score: 默认基础分（代码中可覆盖）
+rule_definitions:
+  URL_IP_DOMAIN:
+    enabled: true
+    title: "IP 地址登录域名"
+    severity: medium
+    group: transport
+    base_score: 12
+    confidence: 0.80
+    tags: ["ip", "auth"]
+  URL_SHORT_LINK:
+    enabled: true
+    severity: medium
+    group: navigation
+    base_score: 8
+  URL_NON_HTTPS:
+    enabled: true
+    severity: low
+    group: transport
+    base_score: 6
+  URL_SUSPICIOUS_PORT:
+    enabled: true
+    severity: low
+    group: transport
+    base_score: 5
+  URL_LONG_SUBDOMAIN:
+    enabled: true
+    severity: medium
+    group: identity
+    base_score: 8
+  URL_AT_SYMBOL:
+    enabled: true
+    severity: high
+    group: navigation
+    base_score: 20
+  URL_NESTED_OFFICIAL_DOMAIN:
+    enabled: true
+    severity: high
+    group: identity
+    base_score: 22
+  DOMAIN_SIMILAR_TO_OFFICIAL:
+    enabled: true
+    severity: high
+    group: identity
+    base_score: 25
+  DOMAIN_PUNYCODE_SUSPICIOUS:
+    enabled: true
+    severity: high
+    group: identity
+    base_score: 28
+  DOMAIN_HOMOGRAPH_ATTACK:
+    enabled: true
+    severity: high
+    group: identity
+    base_score: 30
+  DOMAIN_KEYWORD_IMPERSONATION:
+    enabled: true
+    severity: medium
+    group: identity
+    base_score: 12
+  HTML_PASSWORD_INPUT:
+    enabled: true
+    severity: low
+    group: credential
+    base_score: 4
+  PASSWORD_FORM_UNTRUSTED_TARGET:
+    enabled: true
+    severity: high
+    group: credential
+    base_score: 30
+  TRUSTED_SERVICE_FORBIDDEN_FIELD:
+    enabled: true
+    severity: high
+    group: credential
+    base_score: 30
+  FORM_NON_HTTPS_ACTION:
+    enabled: true
+    severity: medium
+    group: transport
+    base_score: 12
+  FORM_COLLECTS_SENSITIVE_INFO:
+    enabled: true
+    severity: medium
+    group: credential
+    base_score: 12
+  FORM_COLLECTS_SECRET:
+    enabled: true
+    severity: high
+    group: credential
+    base_score: 28
+    dynamic_scoring: true
+  META_REFRESH_REDIRECT:
+    enabled: true
+    severity: medium
+    group: navigation
+    base_score: 10
+  JS_LOCATION_REDIRECT:
+    enabled: true
+    severity: medium
+    group: navigation
+    base_score: 10
+  HIDDEN_FORM_OR_LINK:
+    enabled: true
+    severity: medium
+    group: navigation
+    base_score: 10
+  IFRAME_LOGIN_PAGE:
+    enabled: true
+    severity: medium
+    group: navigation
+    base_score: 12
+  LINK_TEXT_HREF_MISMATCH:
+    enabled: true
+    severity: high
+    group: navigation
+    base_score: 22
+  EXTERNAL_LINK_DOMINANCE:
+    enabled: true
+    severity: medium
+    group: navigation
+    base_score: 12
+  PORTAL_BRAND_EXTERNAL_DOMAIN:
+    enabled: true
+    severity: high
+    group: identity
+    base_score: 25
+  EMAIL_SENDER_IMPERSONATION:
+    enabled: true
+    severity: medium
+    group: identity
+    base_score: 15
+  EMAIL_SENDER_LINK_MISMATCH:
+    enabled: true
+    severity: medium
+    group: identity
+    base_score: 12
+  URGENT_VERIFY_WORDING:
+    enabled: true
+    severity: medium
+    group: social
+    base_score: 8
+  TIME_LIMIT_PRESSURE:
+    enabled: true
+    severity: medium
+    group: social
+    base_score: 10
+  ACCOUNT_DISABLE_THREAT:
+    enabled: true
+    severity: medium
+    group: social
+    base_score: 10
+  REWARD_OR_REFUND_BAIT:
+    enabled: true
+    severity: medium
+    group: social
+    base_score: 8
+  SECURITY_UPGRADE_WORDING:
+    enabled: true
+    severity: low
+    group: social
+    base_score: 5
+  CREDENTIAL_REQUEST_TEXT:
+    enabled: true
+    severity: high
+    group: credential
+    base_score: 25
+  ATTACHMENT_EXECUTABLE:
+    enabled: true
+    severity: high
+    group: payload
+    base_score: 22
+  ATTACHMENT_DOUBLE_EXTENSION:
+    enabled: true
+    severity: high
+    group: payload
+    base_score: 30
+  HTML_BASE64_IMAGE_HEAVY:
+    enabled: true
+    severity: medium
+    group: payload
+    base_score: 10
+  HTML_IMAGE_ONLY_CONTENT:
+    enabled: true
+    severity: medium
+    group: payload
+    base_score: 10
+  QR_CODE_EXTERNAL_URL:
+    enabled: true
+    severity: medium
+    group: navigation
+    base_score: 10
+  QR_CREDENTIAL_URL:
+    enabled: true
+    severity: high
+    group: credential
+    base_score: 20
