@@ -105,6 +105,11 @@ class RemoteAIDetector:
         use_pipeline_score: bool = False,
     ) -> DetectorResult | None:
         if data.get("status") != "success":
+            if use_pipeline_score and data.get("status") == "insufficient_evidence":
+                return self._skipped(
+                    "OCR could not extract reliable text from the image; "
+                    "please upload a clearer screenshot"
+                )
             return self._skipped("AI service did not return sufficient evidence")
         if use_pipeline_score:
             return self._translate_image_response(data)

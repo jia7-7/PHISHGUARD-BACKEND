@@ -1413,7 +1413,14 @@ class OCREngine:
                 text = data["text"][i].strip()
                 if text:
                     conf_val = data["conf"][i]
-                    conf = int(conf_val) / 100.0 if conf_val != "-1" else 0.5
+                    try:
+                        # pytesseract commonly returns decimal strings such as
+                        # "96.514236". Parsing them with int() aborts the whole
+                        # image request even though OCR succeeded.
+                        conf = float(conf_val) / 100.0
+                    except (TypeError, ValueError):
+                        conf = 0.0
+                    conf = max(0.0, min(1.0, conf))
                     results.append({
                         "text": text,
                         "confidence": conf,

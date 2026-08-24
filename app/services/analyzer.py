@@ -79,6 +79,17 @@ class AnalysisService:
                 )
 
         if not completed:
+            if payload.kind == InputKind.IMAGE:
+                ocr_detail = next(
+                    (
+                        status.detail
+                        for status in statuses
+                        if status.detail and "OCR" in status.detail
+                    ),
+                    None,
+                )
+                if ocr_detail:
+                    raise AnalysisUnavailableError(ocr_detail)
             raise AnalysisUnavailableError("No configured detector supports this input")
 
         fused = self.fusion.fuse(completed)

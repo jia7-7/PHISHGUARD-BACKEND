@@ -494,6 +494,7 @@ def get_llm_vendor_display() -> str:
 OCR_CONFIG = {
     "engine": os.getenv("OCR_ENGINE","easyocr"),
     "easyocr": {"languages":["ch_sim","en"], "gpu": os.getenv("EASYOCR_GPU","true").lower()=="true", "model_storage_directory": str(EASYOCR_MODEL_DIR), "download_enabled": True},
+    "tesseract": {"languages": os.getenv("TESSERACT_LANGUAGES", "chi_sim+eng")},
     "preprocessing": {
         "max_image_size": 4096,
         "max_pixels": 100_000_000,
