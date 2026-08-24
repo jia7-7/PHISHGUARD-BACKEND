@@ -39,6 +39,7 @@ class RemoteAIDetector:
         return self._translate_response(
             data,
             use_pipeline_score=payload.kind == InputKind.IMAGE,
+            source_metadata=payload.metadata,
         )
 
     def _post_text(self, payload: AnalysisPayload) -> dict:
@@ -103,6 +104,7 @@ class RemoteAIDetector:
         data: dict,
         *,
         use_pipeline_score: bool = False,
+        source_metadata: dict | None = None,
     ) -> DetectorResult | None:
         if data.get("status") != "success":
             if use_pipeline_score and data.get("status") == "insufficient_evidence":
@@ -134,12 +136,13 @@ class RemoteAIDetector:
         confidence = score_result.get("confidence", 0.0)
         if not isinstance(confidence, (int, float)):
             confidence = 0.0
+        confidence = self._calibrate_ocr_confidence(float(confidence), source_metadata)
 
         return DetectorResult(
             detector=self.name,
             family="ai",
             score=self._semantic_score(llm_evidence),
-            confidence=max(0.0, min(1.0, float(confidence))),
+            confidence=max(0.0, min(1.0, confidence)),
             signals=signals,
             metadata={
                 "score_kind": "llm_semantic_evidence",
@@ -149,9 +152,25 @@ class RemoteAIDetector:
                 "ai_pipeline_level": score_result.get("risk_level"),
                 "llm_sample_status": llm_status,
                 "model_used": data.get("model_used"),
+                "ocr_confidence": (source_metadata or {}).get("ocr_confidence"),
+                "ocr_quality_status": (source_metadata or {}).get("ocr_quality_status"),
                 "warnings": data.get("warnings", []),
             },
         )
+
+    @staticmethod
+    def _calibrate_ocr_confidence(
+        confidence: float,
+        source_metadata: dict | None,
+    ) -> float:
+        metadata = source_metadata or {}
+        if metadata.get("ocr_quality_status") not in {"reliable", "usable_with_warnings"}:
+            return confidence
+        ocr_confidence = metadata.get("ocr_confidence")
+        if not isinstance(ocr_confidence, (int, float)):
+            return confidence
+        ocr_floor = max(0.0, min(0.8, float(ocr_confidence) * 0.75))
+        return max(confidence, ocr_floor)
 
     def _translate_image_response(self, data: dict) -> DetectorResult:
         score_result = data.get("score_result") or {}

@@ -21,6 +21,7 @@ from app.detectors.remote_ai import RemoteAIDetector  # noqa: E402
 from app.models import AnalysisPayload, DetectorResult, InputKind  # noqa: E402
 from app.main import create_app  # noqa: E402
 from app.services.analyzer import AnalysisService, AnalysisUnavailableError  # noqa: E402
+from app.services.fusion import RiskFusionService  # noqa: E402
 from app.services.image_ocr import (  # noqa: E402
     ImageOCRInsufficientError,
     ImageOCRResult,
@@ -65,6 +66,53 @@ def test_image_insufficient_evidence_has_actionable_reason():
 
     assert result is not None
     assert "OCR could not extract reliable text" in result.metadata["skip_reason"]
+
+
+def test_reliable_image_ocr_preserves_strong_semantic_risk_floor():
+    detector = RemoteAIDetector(Settings(ai_service_url="http://127.0.0.1:8100"))
+    result = detector._translate_response(
+        {
+            "status": "success",
+            "llm_sample_status": "usable_first_attempt",
+            "verified_evidence": [
+                {
+                    "source": "llm",
+                    "verification": "matched",
+                    "type": evidence_type,
+                    "severity": "high",
+                    "quote": quote,
+                    "explanation": "可疑语义证据",
+                }
+                for evidence_type, quote in [
+                    ("credential_request", "输入账号密码"),
+                    ("urgency", "立即验证"),
+                    ("impersonation", "统一身份认证"),
+                ]
+            ],
+            "score_result": {"confidence": 0.243, "risk_score": 95},
+        },
+        source_metadata={
+            "ocr_confidence": 0.93,
+            "ocr_quality_status": "reliable",
+        },
+    )
+
+    assert result is not None
+    assert result.confidence >= 0.65
+
+    fused = RiskFusionService(Settings()).fuse(
+        [
+            DetectorResult(
+                detector="security-rules-v3",
+                family="rules",
+                score=0,
+                confidence=0,
+            ),
+            result,
+        ]
+    )
+    assert fused.score >= 60
+    assert fused.level.value == "high"
 
 
 def test_image_insufficient_evidence_is_surfaced_by_analysis_service():
