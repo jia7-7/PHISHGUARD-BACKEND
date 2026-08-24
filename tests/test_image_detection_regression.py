@@ -86,7 +86,6 @@ def test_reliable_image_ocr_preserves_strong_semantic_risk_floor():
                 for evidence_type, quote in [
                     ("credential_request", "输入账号密码"),
                     ("urgency", "立即验证"),
-                    ("impersonation", "统一身份认证"),
                 ]
             ],
             "score_result": {"confidence": 0.243, "risk_score": 95},

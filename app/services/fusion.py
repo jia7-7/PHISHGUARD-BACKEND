@@ -110,7 +110,16 @@ class RiskFusionService:
             if result.metadata.get("score_kind") != "llm_semantic_evidence":
                 continue
             count = int(result.metadata.get("semantic_evidence_count") or 0)
-            if result.score >= 85 and count >= 3 and result.confidence >= 0.65:
+            reliable_ocr = (
+                result.metadata.get("ocr_quality_status") == "reliable"
+                and float(result.metadata.get("ocr_confidence") or 0) >= 0.75
+            )
+            high_evidence_count = 2 if reliable_ocr else 3
+            if (
+                result.score >= 85
+                and count >= high_evidence_count
+                and result.confidence >= 0.65
+            ):
                 floor = RiskLevel.HIGH
             elif result.score >= 65 and count >= 2 and result.confidence >= 0.5:
                 floor = RiskFusionService._higher_level(floor, RiskLevel.MEDIUM)
