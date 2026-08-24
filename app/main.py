@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from collections.abc import Sequence
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -25,6 +26,11 @@ from app.models import (
 )
 from app.services.analyzer import AnalysisService, AnalysisUnavailableError
 from app.services.fusion import RiskFusionService
+from app.services.image_ocr import (
+    ImageOCRInsufficientError,
+    ImageOCRService,
+    ImageOCRUnavailableError,
+)
 
 
 SUPPORTED_FILE_TYPES = [".txt", ".html", ".htm", ".png", ".jpg", ".jpeg", ".webp"]
@@ -35,6 +41,7 @@ FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
 def create_app(
     settings: Settings | None = None,
     detectors: Sequence[Detector] | None = None,
+    image_ocr: ImageOCRService | None = None,
 ) -> FastAPI:
     settings = settings or load_settings()
     configured_detectors = list(detectors) if detectors is not None else [
@@ -42,6 +49,7 @@ def create_app(
         RemoteAIDetector(settings),
     ]
     analyzer = AnalysisService(configured_detectors, RiskFusionService(settings))
+    image_ocr = image_ocr or ImageOCRService()
 
     app = FastAPI(
         title=settings.app_name,
@@ -173,14 +181,44 @@ def create_app(
             )
 
         _validate_image_signature(raw, suffix)
-        return await analyzer.analyze(
+        try:
+            ocr_result = await asyncio.to_thread(image_ocr.extract, raw)
+        except ImageOCRInsufficientError as exc:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail=str(exc),
+            ) from exc
+        except ImageOCRUnavailableError as exc:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail=str(exc),
+            ) from exc
+
+        result = await analyzer.analyze(
             AnalysisPayload(
-                kind=InputKind.IMAGE,
+                kind=InputKind.TEXT,
+                text=ocr_result.text,
                 filename=filename,
                 content_type=content_type,
-                raw_bytes=raw,
+                source_type="other",
+                metadata={
+                    "ocr_text": ocr_result.text,
+                    "ocr_confidence": ocr_result.confidence,
+                    "ocr_quality_status": ocr_result.quality_status,
+                },
             )
         )
+        result.input_type = InputKind.IMAGE
+        result.processing_ms += ocr_result.processing_ms
+        ocr_notice = (
+            "图片已在服务器完成文字识别"
+            f"（平均置信度 {round(ocr_result.confidence * 100)}%，"
+            f"质量状态 {ocr_result.quality_status}），请结合原图复核。"
+        )
+        result.warnings = list(
+            dict.fromkeys([ocr_notice, *ocr_result.warnings, *result.warnings])
+        )[:20]
+        return result
 
     return app
 
